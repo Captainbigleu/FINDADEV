@@ -17,7 +17,6 @@ export class UsersController {
   })
   @Post('register')
   async create(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
 
     createUserDto.password = await encodePassword(createUserDto.password)
     return this.usersService.create(createUserDto);

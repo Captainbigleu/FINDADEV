@@ -10,8 +10,8 @@ export class UsersService {
     return await User.create({ ...createUserDto }).save();
   }
 
-  async findUserByEmail(email: string) {
-    return await User.findOneBy({ email });
+  async findUserByPseudo(pseudo: string) {
+    return await User.findOneBy({ pseudo });
 
   }
 
