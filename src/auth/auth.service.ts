@@ -9,12 +9,17 @@ const usersService = new UsersService();
 @Injectable()
 export class AuthService {
 
-    constructor(private usersService: UsersService,
-        private jwtService: JwtService) { }
+    constructor
+        (private usersService: UsersService,
+            private jwtService: JwtService) { }
 
-    async validateUser(email: string, password: string): Promise<any> {
-        const user: User = await this.usersService.findUserByName(email);
+    async validateUser(pseudo: string, password: string): Promise<any> {
+        const user = await this.usersService.findUserByPseudo(pseudo);
+        console.log(user);
+        
         const encodePassword = await bcrypt.compare(password, user.password)//comparer password hashe avec celui du user
+        console.log(encodePassword);
+        
         if (user && encodePassword) {// remplacer user.password avec le nom de la const de hashage
             const { password, ...result } = user;
             return result;
@@ -22,13 +27,12 @@ export class AuthService {
         return null;
     }
     async login(user: any) {
-        const targetUser = await this.usersService.findUserByName(user.email)
-        const payload = { email: targetUser.email, sub: targetUser.id };
-        return {
+        const targetUser = await this.usersService.findUserByPseudo(user.pseudo);
+        const payload = { username: targetUser.pseudo, sub: targetUser.id };
 
+        return {
             access_token: this.jwtService.sign(payload),
         }
-
     }
 
 }
