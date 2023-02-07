@@ -7,6 +7,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { User } from './users/entities/user.entity';
+import { CompetencesModule } from './competences/competences.module';
+import { Competence } from './competences/entities/competence.entity';
 
 
 @Module({//imports servent à communiquer avec la database
@@ -19,10 +21,10 @@ import { User } from './users/entities/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User],
+      entities: [User, Competence],
       synchronize: true,
       logging: false
-    }), UsersModule, AuthModule,
+    }), UsersModule, AuthModule, CompetencesModule,
 
 
 
