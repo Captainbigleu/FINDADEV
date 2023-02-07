@@ -1,14 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { encodePassword } from 'src/utils/bcrypt';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
+    if (createUserDto.password !== createUserDto.passwordConfirm) {
+      throw new HttpException('non autorisé', HttpStatus.UNAUTHORIZED);
+    }
+    createUserDto.password = await encodePassword(createUserDto.password)
     return this.usersService.create(createUserDto);
   }
 
