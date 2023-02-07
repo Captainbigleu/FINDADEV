@@ -10,23 +10,29 @@ export class UsersService {
     return await User.create({ ...createUserDto }).save();
   }
 
-  async findUserByName(email: string) {
+  async findUserByEmail(email: string) {
     return await User.findOneBy({ email });
 
   }
-  findAll() {
-    return `This action returns all users`;
+
+  async findUserById(id: number) {
+    const user = await User.findOneBy({ id })
+    if (!id) {
+      return undefined;
+    }
+    return user;
+  }
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    const user = await User.findOneBy({ id });
+    if (updateUserDto.pseudo) user.pseudo = updateUserDto.pseudo;
+    if (updateUserDto.adresse) user.adresse = updateUserDto.adresse;
+    return await user.save()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+
+
+  async deleteUser(id: number) {
+    return (await User.delete({ id })).affected;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
 }

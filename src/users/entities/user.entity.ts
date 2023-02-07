@@ -1,4 +1,5 @@
 
+import { text } from "express";
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity('users')
@@ -6,6 +7,13 @@ export class User extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column({
+        length:20,
+        unique:true,
+        nullable:false
+    })
+    pseudo:string;
     
 
     @Column({
@@ -23,14 +31,13 @@ export class User extends BaseEntity {
 
 
     @Column({
-        unique:true
+        nullable:false
     })
     email: string;
 
 
     @Column({
         nullable: false,
-        unique: true
     })
     password: string;
 
@@ -59,17 +66,21 @@ export class User extends BaseEntity {
     city: string
 
 
-    @Column()
-    department:string
-
-
-    @Column()
+    @Column({
+        nullable:false
+    })
     area:string
 
 
-    @Column()
+    @Column({
+        nullable:false
+    })
     country:string
 
+    @Column({
+        nullable:true
+    })
+    presentation:string
 
     
 }

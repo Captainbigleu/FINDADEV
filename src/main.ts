@@ -9,19 +9,18 @@ async function bootstrap() {//fonction qui démarre notre appli
   .setTitle('Findadev example')
   .setDescription('API DevsSourcing')
   .setVersion('1.0')
-  .addTag('users')
   .build();
 const document = SwaggerModule.createDocument(app, config);
 SwaggerModule.setup('api', app, document);
 
 
-/* app.useGlobalPipes(new ValidationPipe({
+app.useGlobalPipes(new ValidationPipe({
 
     whitelist: true,
     forbidNonWhitelisted: true,
 
   })
-  );*/
+  );
 
 
 
