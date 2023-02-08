@@ -41,7 +41,7 @@ export class LanguagesController {
     if (await this.languagesService.findLanguageById(id)) {
       return await this.languagesService.updateLanguage(id, updateLanguageDto);
     }
-    throw new HttpException("Offre introuvable", HttpStatus.NOT_FOUND);
+    throw new HttpException("Langage introuvable", HttpStatus.NOT_FOUND);
   }
 
   @UseGuards(JwtAuthGuard)

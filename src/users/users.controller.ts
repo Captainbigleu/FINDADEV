@@ -10,7 +10,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @ApiTags()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @ApiBody({
     type: CreateUserDto
@@ -31,7 +31,11 @@ export class UsersController {
     }
     return user;
   }
+  @UseGuards(JwtAuthGuard)
+  @Get('search/pseudo')
 
+
+  
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
