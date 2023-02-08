@@ -52,4 +52,10 @@ export class CreateUserDto {
     @IsString()
     country: string
 
+    @ApiProperty()
+    @IsString()
+    presentation:string
+
+
+
 }
