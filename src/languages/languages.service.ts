@@ -7,7 +7,7 @@ import { Language } from './entities/language.entity';
 
 @Injectable()
 export class LanguagesService {
-  async createLanguage(createLanguageDto: CreateLanguageDto,user:User) {
+  async createLanguage(createLanguageDto: CreateLanguageDto, user: User) {
     delete user.password;
     delete user.firstname;
     delete user.lastname;
@@ -15,13 +15,13 @@ export class LanguagesService {
   }
   async findAllLanguages(): Promise<Language[]> {
 
-    return await Language.find({relations: { user: {competences: false}}, select: {user: {pseudo: true, password: false}}});
+    return await Language.find({ relations: { user: { competences: false } }, select: { user: { pseudo: true, password: false } } });
   }
 
 
   async findLanguageById(id: number) {
     const language = await Language.findOneBy({ id })
-    if(!language){
+    if (!language) {
       return undefined;
     }
     return language;

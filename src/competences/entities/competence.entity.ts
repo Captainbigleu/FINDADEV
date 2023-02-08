@@ -1,23 +1,23 @@
 import { User } from "src/users/entities/user.entity";
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 
 @Entity("competences")
 export class Competence extends BaseEntity {
 
     @PrimaryGeneratedColumn()
 
-    id : number
+    id: number
 
-    @Column({ nullable : false })
+    @Column({ nullable: false })
 
-    competence : string
+    competence: string
 
-   /*  @Column({ nullable :false })
+    @Column({ nullable: false })
+    userId: number
 
-    userId : number */
-
-    @ManyToOne(() => User, (user) => user.competence, {
-        nullable: false
+    @ManyToOne(() => User, (user) => user.competences, {
+        nullable: false,
+        onDelete: 'CASCADE'
     })
     user: User
 }

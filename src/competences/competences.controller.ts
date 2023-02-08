@@ -27,16 +27,22 @@ export class CompetencesController {
     return this.competencesService.findAllComp(findAllCompetenceDto);
   }
 
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.competencesService.findOne(+id);
   }
 
+
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCompetenceDto: UpdateCompetenceDto) {
     return this.competencesService.update(+id, updateCompetenceDto);
   }
 
+  
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.competencesService.remove(+id);
