@@ -12,8 +12,8 @@ export class CompetencesService {
     return await Competence.create({ ...createCompetenceDto }).save();
   }
 
-  async findAllComp(findAllCompetenceDto: FindAllCompetenceDto) {
-    return await Competence.findAll({ ...findAllCompetenceDto }).save();
+  async findAllComp(findAllCompetenceDto: FindAllCompetenceDto):Promise <Competence []> {
+    return await Competence.find();
   }
 
   findOne(id: number) {
