@@ -28,14 +28,13 @@ export class LanguagesService {
   }
 
   async updateLanguage(id: number, updateLanguageDto: UpdateLanguageDto) {
-
     const lang = await Language.findOneBy({ id });
     if (updateLanguageDto.programmingLanguage) lang.programmingLanguage = updateLanguageDto.programmingLanguage;
-
+    return await lang.save();
   }
 
-  async deleteLanguage(id: number) {
 
+  async deleteLanguage(id: number) {
     return (await Language.delete({ id })).affected;
   }
 

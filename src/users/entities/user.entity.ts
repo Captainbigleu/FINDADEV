@@ -55,11 +55,10 @@ export class User extends BaseEntity {
     })
     adresse_line2: string;
 
-    @Exclude()
     @Column({
         nullable: false
     })
-    zipCode: string
+    zipCode: string;
 
 
     @Column({
@@ -88,7 +87,7 @@ export class User extends BaseEntity {
 
     competences: Competence[]
 
-    @OneToMany(() => Language, (language) => language.user, { eager: true })
+    @OneToMany(() => Language, (language) => language.user, /* { eager: true } */)
 
     languages: Language[]
 
