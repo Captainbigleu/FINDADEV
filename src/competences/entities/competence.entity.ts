@@ -12,9 +12,6 @@ export class Competence extends BaseEntity {
 
     competence: string
 
-    @Column({ nullable: false })
-    userId: number
-
     @ManyToOne(() => User, (user) => user.competences, {
         nullable: false,
         onDelete: 'CASCADE'

@@ -1,7 +1,8 @@
 
 import { text } from "express";
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn} from "typeorm";
-
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
+import { Competence } from "src/competences/entities/competence.entity";
+import { Language } from "src/languages/entities/language.entity";
 @Entity('users')
 export class User extends BaseEntity {
 
@@ -81,6 +82,14 @@ export class User extends BaseEntity {
         nullable:true
     })
     presentation:string  
+
+    @OneToMany(() => Competence, (competence) => competence.user, { eager: true })
+
+    competences: Competence[]
+
+    @OneToMany(() => Language, (language) => language.user, { eager: true })
+
+    languages: Language[]
 }
 
 

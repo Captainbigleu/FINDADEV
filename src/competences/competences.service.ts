@@ -13,7 +13,7 @@ export class CompetencesService {
   }
 
   async findAllComp(findAllCompetenceDto: FindAllCompetenceDto) {
-    return await Competence.findAll({ ...findAllCompetenceDto }).save();
+    return await Competence.find();
   }
 
   findOne(id: number) {
