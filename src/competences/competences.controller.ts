@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete,Request } from '@nestjs/common';
-import { UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CompetencesService } from './competences.service';
 import { CreateCompetenceDto } from './dto/create-competence.dto';
 import { UpdateCompetenceDto } from './dto/update-competence.dto';
+import { FindAllCompetenceDto } from './dto/findAll-competence.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 
@@ -23,9 +23,9 @@ export class CompetencesController {
     return await this.competencesService.createComp(createCompetenceDto, user);
   }
 
-  @Get()
-  findAllComp() {
-    return this.competencesService.findAllComp();
+  @Get('allcompetences')
+  async findAllComp() {
+    return await this.competencesService.findCompetences();
   }
 
 
@@ -35,7 +35,7 @@ export class CompetencesController {
     return this.competencesService.findOne(+id);
   }
 
-
+  @ApiBody({ type: UpdateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCompetenceDto: UpdateCompetenceDto) {
