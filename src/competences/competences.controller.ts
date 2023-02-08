@@ -1,30 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete,Request } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CompetencesService } from './competences.service';
 import { CreateCompetenceDto } from './dto/create-competence.dto';
-import { FindAllCompetenceDto } from './dto/findAll-competence.dto';
 import { UpdateCompetenceDto } from './dto/update-competence.dto';
-import { ForbiddenException, NotFoundException } from '@nestjs/common/exceptions';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 
 @ApiTags()
 @Controller('competences')
 export class CompetencesController {
-  constructor(private readonly competencesService: CompetencesService) { }
-
+  constructor(private readonly competencesService: CompetencesService,
+              private readonly usersService: UsersService) { }
+  
 
   @ApiBody({ type: CreateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createCompetenceDto: CreateCompetenceDto) {
-    return this.competencesService.createComp(createCompetenceDto);
+  async createComp( @Body() createCompetenceDto: CreateCompetenceDto , @Request()req) {
+   const user = await this.usersService.findUserById(req.user.userId)
+    return this.competencesService.createComp(createCompetenceDto, user);
   }
 
-  @Get('getAll')
-  findAll(@Body() findAllCompetenceDto: FindAllCompetenceDto) {
-    return this.competencesService.findAllComp(findAllCompetenceDto);
+  @Get()
+  findAllComp() {
+    return this.competencesService.findAllComp();
   }
 
 

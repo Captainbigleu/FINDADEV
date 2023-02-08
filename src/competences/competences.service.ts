@@ -3,17 +3,17 @@ import { CompetencesController } from './competences.controller';
 import { CreateCompetenceDto } from './dto/create-competence.dto';
 import { FindAllCompetenceDto } from './dto/findAll-competence.dto';
 import { UpdateCompetenceDto } from './dto/update-competence.dto';
-import { Competence } from './entities/competence.entity'
+import { Competence } from './entities/competence.entity';
+import { User } from 'src/users/entities/user.entity';
 
 
 @Injectable()
 export class CompetencesService {
-  async createComp(createCompetenceDto: CreateCompetenceDto) {
-    return await Competence.create({ ...createCompetenceDto }).save();
+  async createComp(createCompetenceDto: CreateCompetenceDto, user : User) {
+    return await Competence.create({ ...createCompetenceDto, user:user }).save();
   }
 
-  async findAllComp(findAllCompetenceDto: FindAllCompetenceDto):Promise <Competence []> {
-
+  async findAllComp():Promise <Competence []> {
     return await Competence.find();
   }
 
