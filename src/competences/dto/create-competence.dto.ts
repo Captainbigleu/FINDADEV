@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsInt} from "class-validator";
+import { IsNotEmpty, IsString, IsInt } from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCompetenceDto {
@@ -7,12 +7,6 @@ export class CreateCompetenceDto {
     @IsNotEmpty()
     @IsString()
 
-    competence : string
+    competence: string
 
-    /* @ApiProperty()
-    @IsNotEmpty()
-    @IsInt()
-
-    userId : number
- */
 }

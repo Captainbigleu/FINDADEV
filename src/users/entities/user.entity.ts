@@ -1,5 +1,4 @@
 
-import { text } from "express";
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, OneToMany} from "typeorm";
 import { Competence } from "src/competences/entities/competence.entity";
 import { Language } from "src/languages/entities/language.entity";

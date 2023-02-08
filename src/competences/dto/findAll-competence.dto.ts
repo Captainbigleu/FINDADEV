@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsInt} from "class-validator";
+import { IsNotEmpty, IsString} from "class-validator";
 import { ApiProperty } from '@nestjs/swagger';
 
 export class FindAllCompetenceDto {
@@ -9,10 +9,6 @@ export class FindAllCompetenceDto {
 
     competence : string
 
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsInt()
-
-    userId : number
+  
 
 }
