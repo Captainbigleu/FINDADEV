@@ -12,7 +12,11 @@ export class CompetencesService {
     return await Competence.create({ ...createCompetenceDto }).save();
   }
 
+<<<<<<< HEAD
   async findAllComp(findAllCompetenceDto: FindAllCompetenceDto):Promise <Competence []> {
+=======
+  async findAllComp(findAllCompetenceDto: FindAllCompetenceDto) {
+>>>>>>> d7c6b62cab53b2b76137dab82f58c404e85baf21
     return await Competence.find();
   }
 
