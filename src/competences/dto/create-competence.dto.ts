@@ -9,10 +9,10 @@ export class CreateCompetenceDto {
 
     competence : string
 
-    @ApiProperty()
+    /* @ApiProperty()
     @IsNotEmpty()
     @IsInt()
 
     userId : number
-
+ */
 }

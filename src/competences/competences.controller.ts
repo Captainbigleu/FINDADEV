@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request} from '@nestjs/common';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CompetencesService } from './competences.service';
@@ -18,7 +18,7 @@ export class CompetencesController {
   @ApiBody({ type: CreateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createCompetenceDto: CreateCompetenceDto) {
+  create(@Body() createCompetenceDto: CreateCompetenceDto, @Request() req) {
     return this.competencesService.createComp(createCompetenceDto);
   }
 
