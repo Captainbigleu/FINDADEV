@@ -16,8 +16,8 @@ export class Competence extends BaseEntity {
 
     userId : number */
 
-    /* @ManyToOne(() => User, (user) => user.competence, {
+    @ManyToOne(() => User, (user) => user.competence, {
         nullable: false
     })
-    user: User */
+    user: User
 }
