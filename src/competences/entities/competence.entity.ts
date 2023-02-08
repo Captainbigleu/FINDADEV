@@ -17,4 +17,5 @@ export class Competence extends BaseEntity {
         onDelete: 'CASCADE'
     })
     user: User
+
 }
