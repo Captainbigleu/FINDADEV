@@ -20,7 +20,7 @@ export class CompetencesController {
   @Post()
   async createComp( @Body() createCompetenceDto: CreateCompetenceDto , @Request()req) {
    const user = await this.usersService.findUserById(req.user.userId);
-    return this.competencesService.createComp(createCompetenceDto, user);
+    return await this.competencesService.createComp(createCompetenceDto, user);
   }
 
   @Get()

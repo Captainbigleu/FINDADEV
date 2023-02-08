@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request,HttpStatus, HttpException, ParseIntPipe, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -10,7 +10,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 @ApiTags()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @ApiBody({
     type: CreateUserDto
@@ -23,6 +23,23 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get('search/pseudo')
+  async findUserByPseudo(@Param('pseudo') pseudo:string,@Request()req){
+
+    const user = await this.usersService.findUserByPseudo(req.user.pseudo);
+
+    if (!user) {
+
+      throw new HttpException("le user n'existe pas", HttpStatus.BAD_REQUEST);
+    }
+    return user;
+  }
+
+
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findUserById(@Param('id', ParseIntPipe) id: number) {
     const user = await this.usersService.findUserById(id);
@@ -31,11 +48,7 @@ export class UsersController {
     }
     return user;
   }
-  @UseGuards(JwtAuthGuard)
-  @Get('search/pseudo')
 
-
-  
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
