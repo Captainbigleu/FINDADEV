@@ -5,7 +5,6 @@ import { CompetencesService } from './competences.service';
 import { CreateCompetenceDto } from './dto/create-competence.dto';
 import { UpdateCompetenceDto } from './dto/update-competence.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
-import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 
 
@@ -20,7 +19,7 @@ export class CompetencesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createComp( @Body() createCompetenceDto: CreateCompetenceDto , @Request()req) {
-   const user = await this.usersService.findUserById(req.user.userId)
+   const user = await this.usersService.findUserById(req.user.userId);
     return this.competencesService.createComp(createCompetenceDto, user);
   }
 
