@@ -1,6 +1,6 @@
-
-import { text } from "express";
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn} from "typeorm";
+import { Competence } from "src/competences/entities/competence.entity";
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Language } from "src/languages/entities/language.entity";
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -9,12 +9,12 @@ export class User extends BaseEntity {
     id: number;
 
     @Column({
-        length:20,
-        unique:true,
-        nullable:false
+        length: 20,
+        unique: true,
+        nullable: false
     })
-    pseudo:string;
-    
+    pseudo: string;
+
 
     @Column({
         length: 50,
@@ -24,14 +24,14 @@ export class User extends BaseEntity {
 
 
     @Column({
-        length:50,
-        nullable:false
+        length: 50,
+        nullable: false
     })
-    lastname:string;
+    lastname: string;
 
 
     @Column({
-        nullable:false
+        nullable: false
     })
     email: string;
 
@@ -49,7 +49,7 @@ export class User extends BaseEntity {
 
 
     @Column({
-        nullable:true
+        nullable: true
     })
     adresse_line2: string;
 
@@ -67,24 +67,37 @@ export class User extends BaseEntity {
 
 
     @Column({
-        nullable:false
+        nullable: false
     })
-    area:string
+    area: string
 
 
     @Column({
-        nullable:false
+        nullable: false
     })
-    country:string
+    country: string
 
     @Column({
-        nullable:true
+        nullable: true
     })
-    presentation:string
+    presentation: string
 
-    
+
+    @OneToMany(() => Competence, (competence) => competence.user, { eager: true })
+
+    competences: Competence[]
+
+    @OneToMany(() => Language, (language) => language.user, { eager: true })
+
+    languages: Language[]
+
+
+    /* static findByPseudo(pseudo: string, presentation: string) {
+        return this.createQueryBuilder("user")
+            .where("user.pseudo = :pseudo", { pseudo })
+            .andWhere("user.presentation = :presentation", { presentation })
+            .getMany()
+    } */
 }
-
-
 
 

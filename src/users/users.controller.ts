@@ -22,8 +22,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-
-
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findUserById(@Param('id', ParseIntPipe) id: number) {
