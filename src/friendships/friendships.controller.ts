@@ -59,10 +59,12 @@ export class FriendshipsController {
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
     const friendship = await this.friendshipsService.findOne(id);
+    const user = await this.usersService.findUserById(req.user.userId);
+
     if (!friendship) {
       throw new HttpException(" relation introuvable", HttpStatus.NOT_FOUND);
     }
-    if (friendship.friend.id !== friendship.user.id) {
+    if (friendship.friend.id !== user.id && friendship.user.id !== user.id) {
 
       throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
     }

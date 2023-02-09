@@ -25,7 +25,7 @@ export class FriendshipsService {
     return await Friendship.findOne({ relations: { friend: true, user: true }, where: { user: {id: user.id}, friend: {id: friend.id}} });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} friendship`;
+  async remove(id: number) {
+    return await Friendship.delete(id);
   }
 }
