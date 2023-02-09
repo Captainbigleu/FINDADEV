@@ -26,6 +26,6 @@ export class FriendshipsService {
   }
 
   async remove(id: number) {
-    return await Friendship.delete(id);
+    return await Friendship.delete({id})
   }
 }
