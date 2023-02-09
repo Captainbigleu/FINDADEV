@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from "bcrypt";
@@ -15,10 +14,8 @@ export class AuthService {
 
     async validateUser(pseudo: string, password: string): Promise<any> {
         const user = await this.usersService.findUserByPseudo(pseudo);
-        console.log(user);
         
         const encodePassword = await bcrypt.compare(password, user.password)//comparer password hashe avec celui du user
-        console.log(encodePassword);
         
         if (user && encodePassword) {// remplacer user.password avec le nom de la const de hashage
             const { password, ...result } = user;

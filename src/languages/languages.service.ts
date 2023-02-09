@@ -20,7 +20,7 @@ export class LanguagesService {
 
 
   async findLanguageById(id: number) {
-    const language = await Language.findOneBy({ id })
+    const language = await Language.findOne({ relations: { user: true }, where: { id } })
     if (!language) {
       return undefined;
     }

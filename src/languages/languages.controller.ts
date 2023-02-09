@@ -4,9 +4,7 @@ import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UsersService } from 'src/users/users.service';
-import { ApiBody, ApiTags } from "@nestjs/swagger";
-
-
+import { ApiTags } from "@nestjs/swagger";
 
 
 @ApiTags('languages')
@@ -20,8 +18,8 @@ export class LanguagesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createLanguage(@Body() createLanguageDto: CreateLanguageDto, @Request() req) {
-    const language = await this.usersService.findUserById(req.user.userId)
-    return await this.languagesService.createLanguage(createLanguageDto, language);
+    const user = await this.usersService.findUserById(req.user.userId)
+    return await this.languagesService.createLanguage(createLanguageDto, user);
   }
 
 
@@ -41,12 +39,15 @@ export class LanguagesController {
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  async updateLanguage(@Param('id', ParseIntPipe) id: number, @Body() updateLanguageDto: UpdateLanguageDto) {
-    if (await this.languagesService.findLanguageById(id)) {
-
-      return await this.languagesService.updateLanguage(id, updateLanguageDto);
+  async updateLanguage(@Param('id', ParseIntPipe) id: number, @Body() updateLanguageDto: UpdateLanguageDto, @Request() req) {
+    const language = await this.languagesService.findLanguageById(id);
+    if (!language) {
+      throw new HttpException("Langage introuvable", HttpStatus.NOT_FOUND);
     }
-    throw new HttpException("Langage introuvable", HttpStatus.NOT_FOUND);
+    if(language.user.id != req.user.userId){
+      throw new HttpException("Non autorisé", HttpStatus.FORBIDDEN);
+    }
+    return await this.languagesService.updateLanguage(id, updateLanguageDto);
   }
 
   
@@ -62,7 +63,7 @@ export class LanguagesController {
 
     const user = await this.usersService.findUserById(req.user.userId);
 
-    if (!req.user.userId) {
+    if (req.user.userId!=user.id) {
 
       throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
     }
