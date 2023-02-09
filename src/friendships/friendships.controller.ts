@@ -39,7 +39,7 @@ export class FriendshipsController {
   async update(@Param('id', ParseIntPipe) id: number, @Request() req) {
     const friendship = await this.friendshipsService.findOne(id);
     if (!friendship) {
-      throw new HttpException(" realtion introuvable", HttpStatus.NOT_FOUND);
+      throw new HttpException(" relation introuvable", HttpStatus.NOT_FOUND);
     }
     const user = await this.usersService.findUserById(req.user.userId);
     
@@ -62,7 +62,8 @@ export class FriendshipsController {
     if (!friendship) {
       throw new HttpException(" relation introuvable", HttpStatus.NOT_FOUND);
     }
-    if (friendship.friend.id !== user.id) {
+    if (friendship.friend.id !== friendship.user.id) {
+
       throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
     }
     return this.friendshipsService.remove(+id);
