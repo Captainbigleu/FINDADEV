@@ -40,7 +40,7 @@ export class UsersController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
+   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('zipCode/:zipCode')
   async findUserByZipCode(@Param('zipCode') zipCode: string){  
@@ -91,10 +91,10 @@ export class UsersController {
     }
     return user;
   }
-
+ 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get('/id/:id')
+  @Get('/:id')
   async findUserById(@Param('id', ParseIntPipe) id: number) {
     const user = await this.usersService.findUserById(id);
     if (!user) {

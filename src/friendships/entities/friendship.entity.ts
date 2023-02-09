@@ -1,5 +1,6 @@
 import { User } from "src/users/entities/user.entity";
 import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { ApiProperty } from "@nestjs/swagger";
 
 
 
@@ -18,13 +19,13 @@ export class Friendship extends BaseEntity {
     accepted: boolean
 
 
-
+    @ApiProperty({type: ()=> User})
     @ManyToOne(() => User, (user) => user.friendships, { nullable: false, onDelete: 'CASCADE' })
     user: User;
+    @ApiProperty({type: ()=> User})
+    @ManyToOne(() => User, (user) => user.friends, { nullable: false, onDelete: 'CASCADE' })
 
-     @ManyToOne(() => User, (user) => user.friends, { nullable: false, onDelete: 'CASCADE' })
- 
-     friend: User; 
+    friend: User; 
 
 
 
