@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty, IsEmail, IsBoolean } from "class-validator";
+import { IsString, IsNotEmpty, IsEmail, IsBoolean, isNotEmpty } from "class-validator";
+import { User } from "src/users/entities/user.entity";
 
 
 
@@ -7,6 +8,7 @@ import { IsString, IsNotEmpty, IsEmail, IsBoolean } from "class-validator";
 export class CreateFriendshipDto {
 
     @ApiProperty()
-    @IsBoolean()
-    accepted:boolean
+    @IsNotEmpty()
+    @IsString()
+    pseudo: string
 }

@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { User } from 'src/users/entities/user.entity';
 import { CreateFriendshipDto } from './dto/create-friendship.dto';
 import { UpdateFriendshipDto } from './dto/update-friendship.dto';
+import { Friendship } from './entities/friendship.entity';
 
 @Injectable()
 export class FriendshipsService {
-  create(createFriendshipDto: CreateFriendshipDto) {
-    return 'This action adds a new friendship';
+  async createFriendship( user: User, friend: User) {
+    return await Friendship.create({user, friend}).save();
   }
 
   findAll() {

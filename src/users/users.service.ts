@@ -11,10 +11,11 @@ export class UsersService {
   }
 
   async findUserByPseudo(pseudo: string) {
-    return await User.findBy({ pseudo });
+    const user =  await User.findOneBy({ pseudo });
+    return user
   }
 
-  async findUserByZipCode (zipCode: string) {
+   async findUserByZipCode (zipCode: string) {
     return await User.findBy({ zipCode });
   }
 
@@ -28,7 +29,7 @@ export class UsersService {
 
   async findUserByCountry(country: string) {
     return await User.findBy({ country });
-  }
+  } 
   async findUserById(id: number) {
     const user = await User.findOneBy({ id })
     if (!id) {
