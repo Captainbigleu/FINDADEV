@@ -62,9 +62,14 @@ export class FriendshipsController {
     if (!friendship) {
       throw new HttpException(" relation introuvable", HttpStatus.NOT_FOUND);
     }
-    if (friendship.friend.id !== user.id) {
+    const user = await this.usersService.findUserById(req.user.userId);
+    if (friendship.friend.id !== user.id && friendship.user.id !== user.id) {
       throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
     }
-    return this.friendshipsService.remove(+id);
+    if(friendship.accepted){
+      const invertRelation = await this.friendshipsService.findByUserAndFriend(friendship.friend,friendship.user);
+      await this.friendshipsService.remove(invertRelation.id);
+    }
+    return await this.friendshipsService.remove(id);
   }
 }
