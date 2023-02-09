@@ -108,7 +108,7 @@ export class User extends BaseEntity {
     friendships: Friendship[]
 
     @ApiProperty({ type: () => Friendship })
-    @OneToMany(() => Friendship, (friends) => friends.user, { eager: true })
+    @OneToMany(() => Friendship, (friends) => friends.user,  { eager: true })
 
     friends: Friendship[]
 

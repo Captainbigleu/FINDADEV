@@ -6,20 +6,23 @@ import { Friendship } from './entities/friendship.entity';
 
 @Injectable()
 export class FriendshipsService {
-  async createFriendship( user: User, friend: User) {
-    return await Friendship.create({user, friend}).save();
+  async createFriendship(user: User, friend: User) {
+    return await Friendship.create({ user, friend }).save();
   }
 
-  findAll() {
-    return `This action returns all friendships`;
+
+  async findOne(id: number) {
+    return await Friendship.findOne({ relations: { friend: true, user: true }, where: { id } });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} friendship`;
+  async update(id: number) {
+    const friendship = await Friendship.findOneBy({ id });
+    friendship.accepted = true;
+    return friendship.save();
   }
 
-  update(id: number, updateFriendshipDto: UpdateFriendshipDto) {
-    return `This action updates a #${id} friendship`;
+  async findByUserAndFriend(user:User, friend:User){
+    return await Friendship.findOne({ relations: { friend: true, user: true }, where: { user: {id: user.id}, friend: {id: friend.id}} });
   }
 
   remove(id: number) {
