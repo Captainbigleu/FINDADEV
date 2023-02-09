@@ -10,7 +10,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 
 export const Pseudo= createParamDecorator(() : string => 'pseudo');
-@ApiTags()
+@ApiTags("USERS")
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }

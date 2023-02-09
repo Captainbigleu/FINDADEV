@@ -9,9 +9,7 @@ import { DeleteCompetenceDto } from './dto/delete-competence.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 
-
-
-@ApiTags()
+@ApiTags("COMPETENCES")
 @Controller('competences')
 export class CompetencesController {
   constructor(private readonly competencesService: CompetencesService,
@@ -23,9 +21,10 @@ export class CompetencesController {
   @Post()
   async createComp( @Body() createCompetenceDto: CreateCompetenceDto , @Request()req) {
    const user = await this.usersService.findUserById(req.user.userId);
-    return await this.competencesService.createComp(createCompetenceDto, user);
+    return this.competencesService.createComp(createCompetenceDto, user);
   }
 
+  
   
   @ApiBody({ type: FindAllCompetenceDto })
   @Get('allcompetences')
