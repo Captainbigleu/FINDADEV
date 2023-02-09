@@ -11,7 +11,7 @@ export class UsersService {
   }
 
   async findUserByPseudo(pseudo: string) {
-    return await User.findBy({ pseudo });
+    return await User.findOneBy({ pseudo });
   }
 
   async findUserByZipCode (zipCode: string) {
