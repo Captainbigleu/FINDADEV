@@ -11,10 +11,24 @@ export class UsersService {
   }
 
   async findUserByPseudo(pseudo: string) {
-    return await User.findOneBy({ pseudo });
-
+    return await User.findBy({ pseudo });
   }
 
+  async findUserByZipCode (zipCode: string) {
+    return await User.findBy({ zipCode });
+  }
+
+  async findUserByCity(city: string) {
+    return await User.findBy({ city });
+  }
+
+  async findUserByArea(area: string) {
+    return await User.findBy({ area });
+  }
+
+  async findUserByCountry(country: string) {
+    return await User.findBy({ country });
+  }
   async findUserById(id: number) {
     const user = await User.findOneBy({ id })
     if (!id) {
@@ -28,8 +42,6 @@ export class UsersService {
     if (updateUserDto.adresse) user.adresse = updateUserDto.adresse;
     return await user.save()
   }
-
-
 
   async deleteUser(id: number) {
     return (await User.delete({ id })).affected;

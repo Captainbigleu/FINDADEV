@@ -39,6 +39,7 @@ export class LanguagesController {
   @Patch(':id')
   async updateLanguage(@Param('id', ParseIntPipe) id: number, @Body() updateLanguageDto: UpdateLanguageDto) {
     if (await this.languagesService.findLanguageById(id)) {
+
       return await this.languagesService.updateLanguage(id, updateLanguageDto);
     }
     throw new HttpException("Langage introuvable", HttpStatus.NOT_FOUND);
