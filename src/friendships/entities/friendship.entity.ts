@@ -7,11 +7,11 @@ import { ApiProperty } from "@nestjs/swagger";
 @Entity("friendships")
 export class Friendship extends BaseEntity {
 
-
+    @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;
 
-
+    @ApiProperty()
     @Column({
         default: false,
         nullable: false
@@ -23,7 +23,7 @@ export class Friendship extends BaseEntity {
     @ManyToOne(() => User, (user) => user.friendships, { nullable: false, onDelete: 'CASCADE' })
     user: User;
     @ApiProperty({ type: () => User })
-    @ManyToOne(() => User, (user) => user.friends, { nullable: false, onDelete: 'CASCADE'})
+    @ManyToOne(() => User, (user) => user.friends, { nullable: false, onDelete: 'CASCADE' })
 
     friend: User;
 

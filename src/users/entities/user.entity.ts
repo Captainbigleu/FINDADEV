@@ -57,6 +57,7 @@ export class User extends BaseEntity {
     adresse: string;
 
     @ApiProperty()
+    @Exclude()
     @Column({
         nullable: true
     })
@@ -103,11 +104,13 @@ export class User extends BaseEntity {
     languages: Language[]
 
     @ApiProperty({ type: () => Friendship })
+    @Exclude()
     @OneToMany(() => Friendship, (friendship) => friendship.user, { eager: true })
 
     friendships: Friendship[]
 
     @ApiProperty({ type: () => Friendship })
+    @Exclude()
     @OneToMany(() => Friendship, (friends) => friends.user,  { eager: true })
 
     friends: Friendship[]

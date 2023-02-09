@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, ParseIntPipe, HttpStatus, HttpException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, ParseIntPipe, HttpStatus, HttpException, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { LanguagesService } from './languages.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UsersService } from 'src/users/users.service';
-import { ApiTags } from "@nestjs/swagger";
+import { ApiBody, ApiTags } from "@nestjs/swagger";
 
 
 
@@ -21,20 +21,23 @@ export class LanguagesController {
   @Post()
   async createLanguage(@Body() createLanguageDto: CreateLanguageDto, @Request() req) {
     const language = await this.usersService.findUserById(req.user.userId)
-    return this.languagesService.createLanguage(createLanguageDto, language);
+    return await this.languagesService.createLanguage(createLanguageDto, language);
   }
 
-  @UseGuards(JwtAuthGuard)
+
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async findAllLanguages() {
     return await this.languagesService.findAllLanguages();
   }
 
-  @UseGuards(JwtAuthGuard)
+
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findLanguageById(@Param('id', ParseIntPipe) id: number) {
     return await this.languagesService.findLanguageById(id);
   }
+
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
@@ -46,16 +49,32 @@ export class LanguagesController {
     throw new HttpException("Langage introuvable", HttpStatus.NOT_FOUND);
   }
 
+  
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteLanguage(@Param('id', ParseIntPipe) id: number) {
-    if (await this.languagesService.findLanguageById(id)) {
-      if (await this.languagesService.deleteLanguage(id)) {
-        throw new HttpException("Langage supprimée", HttpStatus.ACCEPTED);
-      }
-      throw new HttpException("suppression impossible", HttpStatus.BAD_REQUEST);
+  async deleteLanguage(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    const language = await this.languagesService.findLanguageById(id);
+
+    if (!language) {
+
+      throw new HttpException("langage introuvable", HttpStatus.NOT_FOUND);
     }
-    throw new HttpException("langage introuvable", HttpStatus.NOT_FOUND);
+
+    const user = await this.usersService.findUserById(req.user.userId);
+
+    if (!req.user.userId) {
+
+      throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
+    }
+
+    return await this.languagesService.deleteLanguage(id)
   }
+
 }
+
+
+
+
+
+
 

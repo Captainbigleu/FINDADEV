@@ -1,7 +1,6 @@
-import { Controller, Get, Request, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Request, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { FriendshipsService } from './friendships.service';
 import { CreateFriendshipDto } from './dto/create-friendship.dto';
-import { UpdateFriendshipDto } from './dto/update-friendship.dto';
 import { ApiProperty, ApiTags } from "@nestjs/swagger";
 import { UsersService } from 'src/users/users.service';
 import { UseGuards } from '@nestjs/common';
@@ -9,7 +8,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ParseIntPipe } from '@nestjs/common/pipes';
 
 
-@ApiTags('friendships')
+@ApiTags('FRIENDSHIPS')
 @Controller('friendships')
 export class FriendshipsController {
   constructor(private readonly friendshipsService: FriendshipsService,
@@ -25,6 +24,7 @@ export class FriendshipsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findById(@Param('id', ParseIntPipe) id: number) {
     const friendship = await this.friendshipsService.findOne(id);
@@ -59,7 +59,6 @@ export class FriendshipsController {
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
     const friendship = await this.friendshipsService.findOne(id);
-    const user = await this.usersService.findUserById(req.user.userId);
 
     if (!friendship) {
       throw new HttpException(" relation introuvable", HttpStatus.NOT_FOUND);
