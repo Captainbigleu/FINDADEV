@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, ParseIntPipe, HttpStatus, HttpException} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, ParseIntPipe, HttpStatus, HttpException } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CompetencesService } from './competences.service';
 import { CreateCompetenceDto } from './dto/create-competence.dto';
@@ -13,12 +13,13 @@ import { UsersService } from 'src/users/users.service';
 @Controller('competences')
 export class CompetencesController {
   constructor(private readonly competencesService: CompetencesService,
-              private readonly usersService: UsersService) { }
-  
+    private readonly usersService: UsersService) { }
+
 
   @ApiBody({ type: CreateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Post()
+<<<<<<< HEAD
   async createComp( @Body() createCompetenceDto: CreateCompetenceDto , @Request()req) {
    const user = await this.usersService.findUserById(req.user.userId);
     return this.competencesService.createComp(createCompetenceDto, user);
@@ -26,20 +27,28 @@ export class CompetencesController {
 
   
   
+=======
+  async createComp(@Body() createCompetenceDto: CreateCompetenceDto, @Request() req) {
+    const user = await this.usersService.findUserById(req.user.userId);
+    return await this.competencesService.createComp(createCompetenceDto, user);
+  }
+
+
+>>>>>>> 56fcb653cb688678d01ac3311f52a3f343d8cdff
   @ApiBody({ type: FindAllCompetenceDto })
   @Get('allcompetences')
   async findAllComp() {
     return await this.competencesService.findCompetences();
   }
 
-  
+
   @ApiBody({ type: FindCompetenceDto })
   @Get(':id')
   findCompetenceById(@Param('id', ParseIntPipe) id: number) {
     return this.competencesService.findCompetenceById(id);
   }
 
-  
+
   @ApiBody({ type: UpdateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
@@ -49,8 +58,8 @@ export class CompetencesController {
     }
     throw new HttpException("Competence introuvable", HttpStatus.NOT_FOUND);
   }
-  
-  
+
+
   @ApiBody({ type: DeleteCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
@@ -63,5 +72,5 @@ export class CompetencesController {
     }
     throw new HttpException("Competence introuvable", HttpStatus.NOT_FOUND);
   }
-  
+
 }

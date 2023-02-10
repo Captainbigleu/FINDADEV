@@ -1,9 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsNotEmpty, IsEmail, IsBoolean, isNotEmpty } from "class-validator";
-import { User } from "src/users/entities/user.entity";
-
-
-
+import { IsString, IsNotEmpty } from "class-validator";
 
 export class CreateFriendshipDto {
 
