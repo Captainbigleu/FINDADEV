@@ -26,4 +26,11 @@ export class FriendshipsService {
   async remove(id: number) {
     return await Friendship.delete({id})
   }
+
+  async findByUserAndFriend(user:User, friend:User){
+    return await Friendship.findOne({ relations: { friend: true, user: true }, where: { user: {id: user.id}, friend: {id: friend.id}} });
+  }
 }
+
+
+

@@ -7,13 +7,9 @@ import { UsersService } from 'src/users/users.service';
 import { ApiTags } from '@nestjs/swagger';
 
 
-<<<<<<< HEAD
 
 
 @ApiTags("LANGUAGES")
-=======
-@ApiTags('languages')
->>>>>>> 56fcb653cb688678d01ac3311f52a3f343d8cdff
 @Controller('languages')
 
 export class LanguagesController {

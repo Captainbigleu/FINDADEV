@@ -19,22 +19,12 @@ export class CompetencesController {
   @ApiBody({ type: CreateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Post()
-<<<<<<< HEAD
-  async createComp( @Body() createCompetenceDto: CreateCompetenceDto , @Request()req) {
-   const user = await this.usersService.findUserById(req.user.userId);
-    return this.competencesService.createComp(createCompetenceDto, user);
-  }
-
-  
-  
-=======
   async createComp(@Body() createCompetenceDto: CreateCompetenceDto, @Request() req) {
     const user = await this.usersService.findUserById(req.user.userId);
     return await this.competencesService.createComp(createCompetenceDto, user);
   }
 
 
->>>>>>> 56fcb653cb688678d01ac3311f52a3f343d8cdff
   @ApiBody({ type: FindAllCompetenceDto })
   @Get('allcompetences')
   async findAllComp() {
