@@ -9,7 +9,7 @@ import { CreateUserDto } from './users/dto/create-user.dto';
 
 
 @Controller()
-@ApiTags('Authentification')
+@ApiTags('AUTHENTIFICATION')
 export class AppController {
 
   constructor(private authService: AuthService) { }

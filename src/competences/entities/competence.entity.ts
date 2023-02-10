@@ -1,5 +1,7 @@
 import { User } from "src/users/entities/user.entity";
-import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import { ApiProperty } from "@nestjs/swagger";
+
 
 @Entity("competences")
 export class Competence extends BaseEntity {
@@ -12,6 +14,7 @@ export class Competence extends BaseEntity {
 
     competence: string
 
+    @ApiProperty({type : () => User})
     @ManyToOne(() => User, (user) => user.competences, {
         nullable: false,
         onDelete: 'CASCADE'

@@ -4,10 +4,12 @@ import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UsersService } from 'src/users/users.service';
-import { ApiTags } from "@nestjs/swagger";
+import { ApiTags } from '@nestjs/swagger';
 
 
-@ApiTags('languages')
+
+
+@ApiTags("LANGUAGES")
 @Controller('languages')
 
 export class LanguagesController {

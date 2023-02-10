@@ -11,8 +11,7 @@ export class UsersService {
   }
 
   async findUserByPseudo(pseudo: string) {
-    const user =  await User.findOneBy({ pseudo });
-    return user
+    return await User.findOneBy({ pseudo });
   }
 
    async findUserByZipCode (zipCode: string) {

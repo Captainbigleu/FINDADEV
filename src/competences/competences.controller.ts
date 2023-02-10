@@ -9,9 +9,7 @@ import { DeleteCompetenceDto } from './dto/delete-competence.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 
-
-
-@ApiTags()
+@ApiTags("COMPETENCES")
 @Controller('competences')
 export class CompetencesController {
   constructor(private readonly competencesService: CompetencesService,
