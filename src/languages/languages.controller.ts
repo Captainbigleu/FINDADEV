@@ -4,12 +4,10 @@ import { CreateLanguageDto } from './dto/create-language.dto';
 import { UpdateLanguageDto } from './dto/update-language.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UsersService } from 'src/users/users.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags } from "@nestjs/swagger";
 
 
-
-
-@ApiTags("LANGUAGES")
+@ApiTags('languages')
 @Controller('languages')
 
 export class LanguagesController {
@@ -20,22 +18,11 @@ export class LanguagesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createLanguage(@Body() createLanguageDto: CreateLanguageDto, @Request() req) {
+    if (await this.languagesService.findByLanguageAndUser(req.user.userId, createLanguageDto.programmingLanguage)) {
+      throw new HttpException("Langage déjà existant.", HttpStatus.NOT_ACCEPTABLE);
+    }
     const user = await this.usersService.findUserById(req.user.userId)
     return await this.languagesService.createLanguage(createLanguageDto, user);
-  }
-
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get()
-  async findAllLanguages() {
-    return await this.languagesService.findAllLanguages();
-  }
-
-
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get(':id')
-  async findLanguageById(@Param('id', ParseIntPipe) id: number) {
-    return await this.languagesService.findLanguageById(id);
   }
 
 
@@ -44,15 +31,18 @@ export class LanguagesController {
   async updateLanguage(@Param('id', ParseIntPipe) id: number, @Body() updateLanguageDto: UpdateLanguageDto, @Request() req) {
     const language = await this.languagesService.findLanguageById(id);
     if (!language) {
-      throw new HttpException("Langage introuvable", HttpStatus.NOT_FOUND);
+      throw new HttpException("Langage introuvable.", HttpStatus.NOT_FOUND);
     }
-    if(language.user.id != req.user.userId){
-      throw new HttpException("Non autorisé", HttpStatus.FORBIDDEN);
+    if (language.user.id != req.user.userId) {
+      throw new HttpException("Non autorisé.", HttpStatus.FORBIDDEN);
+    }
+    if (await this.languagesService.findByLanguageAndUser(req.user.userId, updateLanguageDto.programmingLanguage)) {
+      throw new HttpException("Langage déjà existant.", HttpStatus.NOT_ACCEPTABLE);
     }
     return await this.languagesService.updateLanguage(id, updateLanguageDto);
   }
 
-  
+
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteLanguage(@Param('id', ParseIntPipe) id: number, @Request() req) {
@@ -60,17 +50,18 @@ export class LanguagesController {
 
     if (!language) {
 
-      throw new HttpException("langage introuvable", HttpStatus.NOT_FOUND);
+      throw new HttpException("Langage introuvable.", HttpStatus.NOT_FOUND);
     }
 
-    const user = await this.usersService.findUserById(req.user.userId);
-
-    if (req.user.userId!=user.id) {
+    if (req.user.userId !== language.user.id) {
 
       throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
     }
-
-    return await this.languagesService.deleteLanguage(id)
+    if (await this.languagesService.deleteLanguage(id)) {
+      
+      throw new HttpException("Langage supprimé.", HttpStatus.OK);
+    }
+    throw new HttpException("Suppression impossible.", HttpStatus.BAD_REQUEST);
   }
 
 }

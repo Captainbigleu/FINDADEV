@@ -33,7 +33,9 @@ export class LanguagesService {
     return await lang.save();
   }
 
-
+  async findByLanguageAndUser(userId:number, language: string){
+    return await Language.findOne({ where: { user: {id: userId}, programmingLanguage: language }});
+  }
   async deleteLanguage(id: number) {
     return (await Language.delete({ id })).affected;
   }

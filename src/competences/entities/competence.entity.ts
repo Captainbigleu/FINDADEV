@@ -19,6 +19,6 @@ export class Competence extends BaseEntity {
         nullable: false,
         onDelete: 'CASCADE'
     })
-    user: User
+    user: User;
 
 }

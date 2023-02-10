@@ -22,13 +22,20 @@ export class CompetencesService {
   }
 
   async findCompetenceById(id: number) {
-    return await Competence.findOneBy({ id });
+    const competence= await Competence.findOne({ relations: { user: true }, where: { id } })
+    if (!competence) {
+      return undefined;
+    }
+    return competence;
   }
-
   async updateComp(id: number, updateCompetenceDto: UpdateCompetenceDto) {
     const comp = await Competence.findOneBy({ id });
     if (updateCompetenceDto.competence) comp.competence = updateCompetenceDto.competence;
     return await comp.save();
+  }
+
+  async findByCompetenceAndUser(userId:number, competence: string){
+    return await Competence.findOne({ where: { user: {id: userId}, competence : competence }});
   }
   async deleteComp(id: number) {
     return await Competence.delete({id})

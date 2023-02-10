@@ -3,8 +3,6 @@ import { BaseEntity, Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "t
 import { ApiProperty } from "@nestjs/swagger";
 
 
-
-
 @Entity("languages")
 export class Language extends BaseEntity {
 

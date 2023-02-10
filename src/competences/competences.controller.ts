@@ -2,11 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CompetencesService } from './competences.service';
 import { CreateCompetenceDto } from './dto/create-competence.dto';
-import { FindAllCompetenceDto } from './dto/findAll-competence.dto';
-import { FindCompetenceDto } from './dto/find-competence.dto';
 import { UpdateCompetenceDto } from './dto/update-competence.dto';
 import { DeleteCompetenceDto } from './dto/delete-competence.dto';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 
 @ApiTags("COMPETENCES")
@@ -20,12 +18,16 @@ export class CompetencesController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createComp(@Body() createCompetenceDto: CreateCompetenceDto, @Request() req) {
-    const user = await this.usersService.findUserById(req.user.userId);
-    return await this.competencesService.createComp(createCompetenceDto, user);
+    if  (await this.competencesService.findByCompetenceAndUser(req.user.userId, createCompetenceDto.competence)) {
+    throw new HttpException("Cette compétence existe déjà.", HttpStatus.NOT_ACCEPTABLE);
   }
+  
+  const user = await this.usersService.findUserById(req.user.userId)
+    return await this.competencesService.createComp(createCompetenceDto, user);
+}
 
 
-  @ApiBody({ type: FindAllCompetenceDto })
+  /* @ApiBody({ type: FindAllCompetenceDto })
   @Get('allcompetences')
   async findAllComp() {
     return await this.competencesService.findCompetences();
@@ -36,31 +38,50 @@ export class CompetencesController {
   @Get(':id')
   findCompetenceById(@Param('id', ParseIntPipe) id: number) {
     return this.competencesService.findCompetenceById(id);
-  }
+  } */
 
 
   @ApiBody({ type: UpdateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  async updateComp(@Param('id', ParseIntPipe) id: number, @Body() updateCompetenceDto: UpdateCompetenceDto) {
-    if (await this.competencesService.findCompetenceById(id)) {
-      return await this.competencesService.updateComp(id, updateCompetenceDto);
+  async updateComp(@Param('id', ParseIntPipe) id: number, @Body() updateCompetenceDto: UpdateCompetenceDto, @Request() req) {
+    const competence = await this.competencesService.findCompetenceById(id);
+      if (!competence) {
+        throw new HttpException("Compétence introuvable.", HttpStatus.NOT_FOUND);
+      }
+    if (competence.user.id !== req.user.userId) {
+      throw new HttpException("Non autorisé.", HttpStatus.FORBIDDEN);
+  }
+  if (await this.competencesService.findByCompetenceAndUser(req.user.userId, updateCompetenceDto.competence)) {
+    throw new HttpException("Compétence déjà existante.", HttpStatus.NOT_ACCEPTABLE);
+
     }
-    throw new HttpException("Competence introuvable", HttpStatus.NOT_FOUND);
+    return await this.competencesService.updateComp(id, updateCompetenceDto);
   }
 
 
   @ApiBody({ type: DeleteCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
-    if (await this.competencesService.findCompetenceById(id)) {
-      if (await this.competencesService.deleteComp(id)) {
-        throw new HttpException("Compétence supprimée", HttpStatus.ACCEPTED);
-      }
-      throw new HttpException("suppression impossible", HttpStatus.BAD_REQUEST);
+  async deleteComp(@Param('id', ParseIntPipe) id: number, @Request() req) {
+
+    const competence = await this.competencesService.findCompetenceById(id);
+
+    if (!competence) {
+
+      throw new HttpException("Competence introuvable.", HttpStatus.NOT_FOUND);
+
     }
-    throw new HttpException("Competence introuvable", HttpStatus.NOT_FOUND);
+       if (req.user.userId !== competence.user.id) {
+
+      throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
+    }
+    if (await this.competencesService.deleteComp(id)) {
+
+      throw new HttpException("Compétence supprimée.", HttpStatus.OK);
+    }
+    throw new HttpException("Suppression impossible.", HttpStatus.BAD_REQUEST);
   }
+
 
 }
