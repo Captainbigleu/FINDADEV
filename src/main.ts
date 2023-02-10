@@ -6,7 +6,7 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {//fonction qui démarre notre appli
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
-  .setTitle('Findadev example')
+  .setTitle('Findadev API')
   .setDescription('API DevsSourcing')
   .setVersion('1.0')
   .build();

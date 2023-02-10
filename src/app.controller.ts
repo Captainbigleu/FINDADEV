@@ -4,7 +4,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { AppService } from './app.service';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags,ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateUserDto } from './users/dto/create-user.dto';
 
 
@@ -19,6 +19,8 @@ export class AppController {
     type: CreateUserDto
   })
   @Post('auth/login')
+  @ApiOperation ({ summary: 'Connexion à un compte utilisateur' })
+  @ApiResponse ({ status:200, description:'Authentification réussie'})
   async login(@Request() req: any) {
     console.log(req);
     
@@ -32,6 +34,7 @@ export class AppController {
     type: CreateUserDto
   })
   @Get('profile')
+  @ApiOperation ({ summary: 'Profil utilisateur' })
   getProfile(@Request() req) {
     return req.user;
   }
