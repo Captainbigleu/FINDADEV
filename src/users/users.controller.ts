@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException, ParseIntPipe, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, HttpException, Request, ParseIntPipe, ClassSerializerInterceptor, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,13 +21,18 @@ export class UsersController {
   @Post('register')
   async create(@Body() createUserDto: CreateUserDto) {
 
+    const ExistingUser = await this.usersService.findUserByPseudo(createUserDto.pseudo);
+    if (ExistingUser) {
+      throw new HttpException("le pseudo existe déjà", HttpStatus.NOT_ACCEPTABLE);
+    }
     createUserDto.password = await encodePassword(createUserDto.password)
-    return this.usersService.create(createUserDto);// code status pseudo déjà utilisé à faire
+
+    return this.usersService.create(createUserDto);
   }
 
 
 
-  @UseGuards(JwtAuthGuard)
+
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('pseudo/:pseudo')
   async findUserByPseudo(@Param('pseudo') pseudo: string) {
@@ -35,12 +40,13 @@ export class UsersController {
     const user = await this.usersService.findUserByPseudo(pseudo);
     console.log(user, 'essai');
     if (!user) {
+
       throw new HttpException("le pseudo n'existe pas", HttpStatus.BAD_REQUEST);
     }
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
+
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('zipCode/:zipCode')
   async findUserByZipCode(@Param('zipCode') zipCode: string) {
@@ -53,7 +59,7 @@ export class UsersController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
+
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('city/:city')
   async findUserByCity(@Param('city') city: string) {
@@ -66,7 +72,7 @@ export class UsersController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
+
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('area/:area')
   async findUserByArea(@Param('area') area: string) {
@@ -79,7 +85,7 @@ export class UsersController {
     return user;
   }
 
-  @UseGuards(JwtAuthGuard)
+
   @UseInterceptors(ClassSerializerInterceptor)
   @Get('country/:country')
   async findUserByCountry(@Param('country') country: string) {
@@ -87,7 +93,7 @@ export class UsersController {
     const user = await this.usersService.findUserByCountry(country);
     console.log(user, 'essai');
     if (!user) {
-      throw new HttpException("le pays demandé n'existe pas", HttpStatus.BAD_REQUEST);
+      throw new HttpException ("le pays demandé n'existe pas", HttpStatus.BAD_REQUEST);
     }
     return user;
   }
@@ -104,26 +110,25 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Patch('/:id')
-  async updateUser(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    if (await this.usersService.findUserById(id)) {
-      return this.usersService.updateUser(id, updateUserDto);//A faire éviter aux autres de pouvoir avec une auth changer notre pseudo
+  @Patch()
+  async updateUser( @Body() updateUserDto: UpdateUserDto, @Request() req){ 
+    const ExistingUser = await this.usersService.findUserByPseudo(updateUserDto.pseudo);
+    if (ExistingUser) {
+      throw new HttpException("le pseudo existe déjà", HttpStatus.NOT_ACCEPTABLE);
     }
-    throw new HttpException("Compte introuvable", HttpStatus.NOT_FOUND);
+    return await this.usersService.updateUser(req.user.userId, updateUserDto);
   }
 
 
   @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    if (await this.usersService.findUserById(id)) {
-      if (await this.usersService.deleteUser(id)) {
+  @Delete()
+  async deleteUser(@Request() req) {
+
+      if (await this.usersService.deleteUser(req.user.userId)) {
         throw new HttpException("Compte supprimé", HttpStatus.ACCEPTED);
       }
       throw new HttpException("suppression impossible", HttpStatus.BAD_REQUEST);
     }
-    throw new HttpException("Compte introuvable", HttpStatus.NOT_FOUND);//A faire éviter de pouvoir delete le compte de n'importe quel utilisateur
 
   }
-}
 

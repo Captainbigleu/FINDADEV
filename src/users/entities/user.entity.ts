@@ -12,6 +12,8 @@ export class User extends BaseEntity {
     @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;
+
+
     @ApiProperty()
     @Column({
         length: 20,
@@ -20,12 +22,15 @@ export class User extends BaseEntity {
     })
     pseudo: string;
 
+
     @ApiProperty()
+    @Exclude()
     @Column({
         length: 50,
         nullable: false
     })
     firstname: string;
+
 
     @ApiProperty()
     @Exclude()
@@ -35,12 +40,14 @@ export class User extends BaseEntity {
     })
     lastname: string;
 
+
     @ApiProperty()
     @Exclude()
     @Column({
         nullable: false
     })
     email: string;
+
 
     @ApiProperty()
     @Exclude()
@@ -49,12 +56,14 @@ export class User extends BaseEntity {
     })
     password: string;
 
+
     @ApiProperty()
     @Exclude()
     @Column({
         nullable: false
     })
     adresse: string;
+
 
     @ApiProperty()
     @Exclude()
@@ -63,11 +72,13 @@ export class User extends BaseEntity {
     })
     adresse_line2: string;
 
+
     @ApiProperty()
     @Column({
         nullable: false
     })
     zipCode: string;
+
 
     @ApiProperty()
     @Column({
@@ -75,11 +86,13 @@ export class User extends BaseEntity {
     })
     city: string
 
+
     @ApiProperty()
     @Column({
         nullable: false
     })
     area: string
+
 
     @ApiProperty()
     @Column({
@@ -87,11 +100,13 @@ export class User extends BaseEntity {
     })
     country: string
 
+
     @ApiProperty()
     @Column({
         nullable: true
     })
     presentation: string
+
 
     @ApiProperty({ type: () => Competence })
     @OneToMany(() => Competence, (competence) => competence.user, { eager: true })
@@ -99,7 +114,7 @@ export class User extends BaseEntity {
     competences: Competence[]
 
     @ApiProperty({ type: () => Language })
-    @OneToMany(() => Language, (language) => language.user, /* { eager: true } */)
+    @OneToMany(() => Language, (language) => language.user, { eager: true } )
 
     languages: Language[]
 

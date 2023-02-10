@@ -6,8 +6,10 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UsersService {
   async create(createUserDto: CreateUserDto) {
-
-    return await User.create({ ...createUserDto }).save();
+    const user = await User.create({ ...createUserDto }).save();
+    delete user.password;
+    return user;
+    
   }
 
   async findUserByPseudo(pseudo: string) {
