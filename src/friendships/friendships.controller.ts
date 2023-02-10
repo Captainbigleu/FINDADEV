@@ -1,7 +1,7 @@
 import { Controller, Get, Request, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
 import { FriendshipsService } from './friendships.service';
 import { CreateFriendshipDto } from './dto/create-friendship.dto';
-import { ApiProperty, ApiTags } from "@nestjs/swagger";
+import {  ApiTags,ApiResponse,ApiOperation } from "@nestjs/swagger";
 import { UsersService } from 'src/users/users.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -17,6 +17,7 @@ export class FriendshipsController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @ApiOperation({ summary: "Demande d'amitié à un utilisateur " })
   async createFriendship(@Body() body: CreateFriendshipDto, @Request() req) {
     const user = await this.usersService.findUserById(req.user.userId);
     const friend = await this.usersService.findUserByPseudo(body.pseudo);
@@ -26,6 +27,7 @@ export class FriendshipsController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
+  @ApiOperation({ summary: "Chercher un ami par son id" })
   async findById(@Param('id', ParseIntPipe) id: number) {
     const friendship = await this.friendshipsService.findOne(id);
     if (!friendship) {
@@ -36,6 +38,7 @@ export class FriendshipsController {
 
   @UseGuards(JwtAuthGuard)//accepte l'invitation et sert à créer la relation inverse de friendId vers UserId
   @Patch(':id')
+  @ApiOperation({ summary: "Modifier ses demandes d'amitiés" })
   async update(@Param('id', ParseIntPipe) id: number, @Request() req) {
     const friendship = await this.friendshipsService.findOne(id);
     if (!friendship) {
@@ -57,6 +60,7 @@ export class FriendshipsController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @ApiOperation({ summary: "Supprimer un ami par son id" })
   async remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
     const friendship = await this.friendshipsService.findOne(id);
 
