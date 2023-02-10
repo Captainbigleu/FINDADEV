@@ -4,7 +4,7 @@ import { CompetencesService } from './competences.service';
 import { CreateCompetenceDto } from './dto/create-competence.dto';
 import { UpdateCompetenceDto } from './dto/update-competence.dto';
 import { DeleteCompetenceDto } from './dto/delete-competence.dto';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 
 @ApiTags("COMPETENCES")
@@ -17,14 +17,15 @@ export class CompetencesController {
   @ApiBody({ type: CreateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Post()
+  @ApiOperation({ summary: "Création d'une compétence sur compte utilisateur" })
   async createComp(@Body() createCompetenceDto: CreateCompetenceDto, @Request() req) {
-    if  (await this.competencesService.findByCompetenceAndUser(req.user.userId, createCompetenceDto.competence)) {
-    throw new HttpException("Cette compétence existe déjà.", HttpStatus.NOT_ACCEPTABLE);
-  }
-  
-  const user = await this.usersService.findUserById(req.user.userId)
+    if (await this.competencesService.findByCompetenceAndUser(req.user.userId, createCompetenceDto.competence)) {
+      throw new HttpException("Cette compétence existe déjà.", HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    const user = await this.usersService.findUserById(req.user.userId)
     return await this.competencesService.createComp(createCompetenceDto, user);
-}
+  }
 
 
   /* @ApiBody({ type: FindAllCompetenceDto })
@@ -44,16 +45,17 @@ export class CompetencesController {
   @ApiBody({ type: UpdateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
+  @ApiOperation({ summary: "Modification d'une compétence sur compte utilisateur" })
   async updateComp(@Param('id', ParseIntPipe) id: number, @Body() updateCompetenceDto: UpdateCompetenceDto, @Request() req) {
     const competence = await this.competencesService.findCompetenceById(id);
-      if (!competence) {
-        throw new HttpException("Compétence introuvable.", HttpStatus.NOT_FOUND);
-      }
+    if (!competence) {
+      throw new HttpException("Compétence introuvable.", HttpStatus.NOT_FOUND);
+    }
     if (competence.user.id !== req.user.userId) {
       throw new HttpException("Non autorisé.", HttpStatus.FORBIDDEN);
-  }
-  if (await this.competencesService.findByCompetenceAndUser(req.user.userId, updateCompetenceDto.competence)) {
-    throw new HttpException("Compétence déjà existante.", HttpStatus.NOT_ACCEPTABLE);
+    }
+    if (await this.competencesService.findByCompetenceAndUser(req.user.userId, updateCompetenceDto.competence)) {
+      throw new HttpException("Compétence déjà existante.", HttpStatus.NOT_ACCEPTABLE);
 
     }
     return await this.competencesService.updateComp(id, updateCompetenceDto);
@@ -63,6 +65,7 @@ export class CompetencesController {
   @ApiBody({ type: DeleteCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @ApiOperation({ summary: "Suppression d'une compétence sur compte utilisateur" })
   async deleteComp(@Param('id', ParseIntPipe) id: number, @Request() req) {
 
     const competence = await this.competencesService.findCompetenceById(id);
@@ -72,7 +75,7 @@ export class CompetencesController {
       throw new HttpException("Competence introuvable.", HttpStatus.NOT_FOUND);
 
     }
-       if (req.user.userId !== competence.user.id) {
+    if (req.user.userId !== competence.user.id) {
 
       throw new HttpException(" Non autorisé.", HttpStatus.FORBIDDEN);
     }
