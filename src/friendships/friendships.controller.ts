@@ -1,4 +1,4 @@
-import { Controller, Get, Request, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Request, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { FriendshipsService } from './friendships.service';
 import { CreateFriendshipDto } from './dto/create-friendship.dto';
 import { UpdateFriendshipDto } from './dto/update-friendship.dto';
@@ -8,7 +8,6 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 
-@ApiTags("FRIENDSHIPS")
 @ApiTags('friendships')
 @Controller('friendships')
 export class FriendshipsController {
@@ -25,19 +24,15 @@ export class FriendshipsController {
     return await this.friendshipsService.createFriendship(user, friend);
   }
 
-  @Get()
-  findAll() {
-    return this.friendshipsService.findAll();
-  }
-
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.friendshipsService.findOne(+id);
+  async findById(@Param('id') id: number) {
+    const   this.friendshipsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFriendshipDto: UpdateFriendshipDto) {
-    return this.friendshipsService.update(+id, updateFriendshipDto);
+
+  @Patch()
+  async update(@Param('id', ParseIntPipe) id: number) {
+    return await this.friendshipsService.update(id);
   }
 
   @Delete(':id')
