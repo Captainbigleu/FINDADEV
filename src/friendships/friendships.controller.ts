@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { Controller, Get, Request, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
-=======
 import { Controller, Get, Request, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
->>>>>>> 56fcb653cb688678d01ac3311f52a3f343d8cdff
 import { FriendshipsService } from './friendships.service';
 import { CreateFriendshipDto } from './dto/create-friendship.dto';
 import { ApiProperty, ApiTags } from "@nestjs/swagger";
@@ -27,17 +23,6 @@ export class FriendshipsController {
     return await this.friendshipsService.createFriendship(user, friend);
   }
 
-<<<<<<< HEAD
-  @Get(':id')
-  async findById(@Param('id') id: number) {
-    const   this.friendshipsService.findOne(id);
-  }
-
-
-  @Patch()
-  async update(@Param('id', ParseIntPipe) id: number) {
-    return await this.friendshipsService.update(id);
-=======
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
@@ -68,7 +53,6 @@ export class FriendshipsController {
     const inverseRelation = await this.friendshipsService.createFriendship(friendship.friend, friendship.user);
     return await this.friendshipsService.update(inverseRelation.id);
     
->>>>>>> 56fcb653cb688678d01ac3311f52a3f343d8cdff
   }
 
   @UseGuards(JwtAuthGuard)
