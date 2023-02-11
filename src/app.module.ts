@@ -21,7 +21,7 @@ import { Friendship } from './friendships/entities/friendship.entity';
 
 @Module({//imports servent à communiquer avec la database
   imports: [
-    ConfigModule.forRoot(),// c'est quoi?
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: "postgres",
       host: process.env.DB_HOST,

@@ -13,14 +13,11 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
  * * Contrôle des informations entrantes , Vérification avant envoi en base de données, suivant un protocole précis et renseigné.
  * * Création de comptes, Recherche via des critères, Modifification deS données, Suppression d'un compte utilisateur.
  */
-
 @ApiBearerAuth()
 @ApiTags('USERS')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
-
-
   /** 
    * @method create :
    * 
@@ -29,8 +26,6 @@ export class UsersController {
    * * Méthode d'authentification et respect des contraintes.
    * * Envoi d'un message correspondant au résultat de la requête.
    */
-
-
   @Post('register')
   @ApiOperation({ summary: "Création d'un compte utilisateur" })
   @ApiResponse({ status: 403, description: 'Forbidden.' })
@@ -44,7 +39,6 @@ export class UsersController {
 
     return this.usersService.create(createUserDto);
   }
-
   /** 
    * @method findUserByPseudo:
    * * Contrôle des données sur la recherche par Pseudo
@@ -61,7 +55,6 @@ export class UsersController {
     }
     return user;
   }
-
   /** 
    * @method findUserByZipCode:
    * * Contrôle des données sur la recherche par code postal.
@@ -78,7 +71,6 @@ export class UsersController {
     }
     return user;
   }
-
   /** 
   * @method findUserByCity:
   * * Contrôle des données sur la recherche par ville.
@@ -95,7 +87,6 @@ export class UsersController {
     }
     return user;
   }
-
   /** 
  * @method findUserByArea:
  * * Contrôle des données sur la recherche par région.
@@ -112,7 +103,6 @@ export class UsersController {
     }
     return user;
   }
-
   /** 
  * @method findUserByCountry:
  * * Contrôle des données sur la recherche par pays.
@@ -129,7 +119,6 @@ export class UsersController {
     }
     return user;
   }
-
   /** 
  * @method findUserById:
  * * Contrôle des données sur la recherche par id d'un utilisateur.
@@ -150,7 +139,6 @@ export class UsersController {
     }
     return user;
   }
-
   /** 
  * @method updateUser:
  * * Contrôle des données sur la modification d'un compte utilisateur.
@@ -162,13 +150,16 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'informations modifiées' })
   async updateUser(@Body() updateUserDto: UpdateUserDto, @Request() req) {
 
+    const pseudoExist = await this.usersService.findUserByPseudo(updateUserDto.pseudo);
+
+    if (updateUserDto.pseudo && pseudoExist) {
+
+      throw new HttpException("le pseudo existe déjà", HttpStatus.CONFLICT);
+    }
     const updatedInfo = await this.usersService.updateUser(req.user.userId, updateUserDto);
 
     return updatedInfo;
   }
-
-
-
   /** 
  * @method deleteUser:
  * * Contrôle des données sur la suppression d'un compte utilisateur.

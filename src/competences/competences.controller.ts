@@ -7,13 +7,23 @@ import { DeleteCompetenceDto } from './dto/delete-competence.dto';
 import { ApiBody, ApiTags, ApiOperation } from '@nestjs/swagger';
 import { UsersService } from 'src/users/users.service';
 
+/**@class CompétencesController
+ * 
+ * * Méthode chargée d'invoquer le service compétences.
+ * * Contrôle des requêtes entrantes , Vérification avant envoi en base de données, invoque le service.
+ * * Création, Recherche via certains critères, Modifification des données , Suppression d'une compétence.
+ */
 @ApiTags("COMPETENCES")
 @Controller('competences')
 export class CompetencesController {
   constructor(private readonly competencesService: CompetencesService,
     private readonly usersService: UsersService) { }
 
-
+  /** 
+  * @method createComp:
+  * * Contrôle des données sur la création  d'une compétence utilisateur.
+  * * Envoi d'un message correspondant au résultat de la requête.
+  */
   @ApiBody({ type: CreateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -26,7 +36,6 @@ export class CompetencesController {
     const user = await this.usersService.findUserById(req.user.userId)
     return await this.competencesService.createComp(createCompetenceDto, user);
   }
-
 
   /* @ApiBody({ type: FindAllCompetenceDto })
   @Get('allcompetences')
@@ -42,6 +51,11 @@ export class CompetencesController {
   } */
 
 
+  /** 
+  * @method updateComp:
+  * * Contrôle des données sur la modification d'une compétence utilisateur.
+  * * Envoi d'un message correspondant au résultat de la requête.
+  */
   @ApiBody({ type: UpdateCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
@@ -60,8 +74,11 @@ export class CompetencesController {
     }
     return await this.competencesService.updateComp(id, updateCompetenceDto);
   }
-
-
+  /** 
+  * @method deleteComp:
+  * * Contrôle des données sur la suppression d'une compétence utilisateur.
+  * * Envoi d'un message correspondant au résultat de la requête.
+  */
   @ApiBody({ type: DeleteCompetenceDto })
   @UseGuards(JwtAuthGuard)
   @Delete(':id')

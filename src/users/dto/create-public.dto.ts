@@ -14,4 +14,10 @@ export class CreatePublicUserDto {
     @ApiProperty()
     @IsString()
     presentation:string
+
+    @ApiProperty()
+    @IsString()
+    @IsNotEmpty()
+    adresse: string;
+
 }

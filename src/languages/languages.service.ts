@@ -30,7 +30,6 @@ export class LanguagesService {
 
     return await Language.find({ relations: { user: { competences: false } }, select: { user: { pseudo: true, password: false } } });
   }
-
   /** 
     * @method findLanguageById :
     * * Methode permettant de récupérer les données d'un langage par son id.
