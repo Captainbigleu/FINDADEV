@@ -20,7 +20,6 @@ export class AppController {
   @ApiOperation ({ summary: 'Connexion à un compte utilisateur' })
   @ApiResponse ({ status:200, description:'Authentification réussie'})
   async login(@Request() req: any) {
-    console.log(req);
     
     return this.authService.login(req.body);
     
