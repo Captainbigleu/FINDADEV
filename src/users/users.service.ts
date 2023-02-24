@@ -12,6 +12,7 @@ import { User } from './entities/user.entity';
  */
 @Injectable()
 export class UsersService {
+
   /** 
    * @method create :
    * * Methode permettant de créer un utlisateur suivant le modèle du CreatUserDto.
@@ -22,6 +23,7 @@ export class UsersService {
     return user;
 
   }
+
   /** 
    * @method findUserByPseudo :
    * * Methode permettant de récupérer les données utlisateurs par pseudo.
@@ -29,6 +31,7 @@ export class UsersService {
   async findUserByPseudo(pseudo: string) {
     return await User.findOneBy({ pseudo });
   }
+  
   /** 
    * @method findUserByZipCode :
    * * Methode permettant de récupérer les données utlisateurs par code postal.
@@ -36,6 +39,7 @@ export class UsersService {
   async findUserByZipCode(zipCode: string) {
     return await User.findBy({ zipCode });
   }
+
   /** 
    * @method findUserByCity :
    * * Methode permettant de récupérer les données utlisateurs par ville.
@@ -43,6 +47,7 @@ export class UsersService {
   async findUserByCity(city: string) {
     return await User.findBy({ city });
   }
+
   /** 
    * @method findUserByArea :
    * * Methode permettant de récupérer les données utlisateurs par région.
@@ -50,6 +55,7 @@ export class UsersService {
   async findUserByArea(area: string) {
     return await User.findBy({ area });
   }
+
   /** 
    * @method findUserByCountry :
    * * Methode permettant de récupérer les données utlisateurs par pays.
@@ -57,6 +63,7 @@ export class UsersService {
   async findUserByCountry(country: string) {
     return await User.findBy({ country });
   }
+
   /** 
    * @method findUserById :
    * * Methode permettant de trouver un utlisateur par son id.
@@ -68,6 +75,7 @@ export class UsersService {
     }
     return user;
   }
+
   /** 
    * @method updateUser :
    * * Methode permettant de modifier les données d'un compte utlisateur avec la classe UpdateUserDto
@@ -81,6 +89,7 @@ export class UsersService {
     return await user.save();
 
   }
+
   /** 
    * @method deleteUser :
    * * Méthode permettant de supprimer un compte utlisateur.

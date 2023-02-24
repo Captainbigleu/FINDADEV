@@ -35,6 +35,23 @@ export class LanguagesController {
     const user = await this.usersService.findUserById(req.user.userId)
     return await this.languagesService.createLanguage(createLanguageDto, user);
   }
+
+  /** 
+      * @method findUserByLanguage :
+      * 
+      * Une méthode permettant de :
+      * * Contrôler les données entrantes lors de la recherche d'un service.
+      * * Envoi d'un message correspondant au résultat de la requête.
+      */
+  @Get('programmingLanguage/:programmingLanguage')
+  @ApiOperation({ summary: 'Chercher un utilisateur par ses langages informatiques' })
+  async findUserByLanguage(@Param('programmingLanguage') programmingLanguage: string) {
+    const data = await this.languagesService.findUserByLanguage(programmingLanguage);
+    if (!data) {
+      throw new HttpException("Langage introuvable.", HttpStatus.NOT_FOUND);
+    }
+    return data;
+  }
   /** 
     * @method updateLanguage:
     * * Contrôle les données entrantes sur la modification d'un langage

@@ -41,6 +41,13 @@ export class LanguagesService {
     }
     return language;
   }
+
+  async findUserByLanguage(programmingLanguage: string) {
+    return await Language.findBy({ programmingLanguage });
+  }
+
+  
+
   /** 
     * @method updateLanguage :
     * * Methode permettant de modifier les données d'un langage du compte utlisateur

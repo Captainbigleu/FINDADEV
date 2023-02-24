@@ -29,7 +29,9 @@ export class CompetencesController {
   @Post()
   @ApiOperation({ summary: "Création d'une compétence sur compte utilisateur" })
   async createComp(@Body() createCompetenceDto: CreateCompetenceDto, @Request() req) {
+
     if (await this.competencesService.findByCompetenceAndUser(req.user.userId, createCompetenceDto.competence)) {
+      
       throw new HttpException("Cette compétence existe déjà.", HttpStatus.NOT_ACCEPTABLE);
     }
 
